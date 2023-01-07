@@ -1,0 +1,47 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.tmi'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// MySQL
+	implementation 'mysql:mysql-connector-java'
+
+	// JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // 스프링 부트용 spring data jpa 추상화 라이브러리
+//	implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.3.10.Final'
+	implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.10.Final'
+	implementation 'com.h2database:h2' // 메모리에서 실행되어 애플리케이션 재시작마다 초기화된다
+
+
+
+//	compile('org.springframework.boot:spring-boot-stater-data-jpa')
+//	compile('com.h2database:h2') // 인메모리 RDB
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
