@@ -28,16 +28,20 @@ public class MemberServiceImpl implements MemberService{
             // 아이디가 존재하지 않으면, DB에 추가
 
 //            encrypt util 적용 예시
-//            String encryptPassword = encrypt.encryptPassword(member.getMemberpw());
+//            String salt = encrypt.generateSalt();
+            byte[] salt = encrypt.generateSalt();
+            String encryptPassword = encrypt.encryptPassword(member.getMemberpw(), salt);
+            // salt value 생성과 암호화 작업을 분리
 
-            String salt = "TEST"; // BCrtpt 추가 필요
-
+            // salt value 저장
             member.setSalt(salt);
-            String temp = salt + member.getMemberpw();
-            // sha-256 알고리즘 작성 부분
-
             // 암호화 이후 비밀번호 저장
-            member.setMemberpw(temp);
+            member.setMemberpw(encryptPassword);
+
+            System.out.println(member.getMemberid());
+            System.out.println(member.getMemberpw());
+            System.out.println(member.getSalt());
+            System.out.println(member.getIdx());
 
             memberRepository.save(member); // 회원 정보 저장
             // 저장 성공하면 return true, 실패하면 return false 하는게 더 좋은 방향
@@ -50,9 +54,19 @@ public class MemberServiceImpl implements MemberService{
     public boolean login(Member member) throws Exception {
         // 입력한 비밀번호를 테이블에 저장된 솔트값을 읽어와서 sha-256 알고리즘으로 암호화하여 유효성 검사를 하는 로직 추가
         // 유효성 검사는 추가 검색 필요
+        Member guest = memberRepository.findByMemberid(member.getMemberid());
+//        System.out.println(guest.toString());
+
+        String encryptPassword = encrypt.encryptPassword(member.getMemberpw(), guest.getSalt());
 
         // 로그인시 토큰값을 넘겨주는 방향 검토
-        return memberRepository.existsByMemberidAndMemberpw(member.getMemberid(), member.getMemberpw());
+        if(encryptPassword.equals(member.getMemberpw())){
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
     @Override

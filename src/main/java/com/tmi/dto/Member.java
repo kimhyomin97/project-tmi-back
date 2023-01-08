@@ -19,16 +19,18 @@ public class Member {
 
     @Id // PK 필드
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK 생성 규칙, IDENTITY : auto_increment
+    @Column(unique = true, nullable = false)
     private Long idx;
 
     @Column(length = 45, nullable = false) // 필수는 아님
     private String memberid;
 
-    @Column(length = 45, nullable = false)
+    @Column(nullable = false)
     private String memberpw;
 
     @Column(length = 45, nullable = false)
-    private String salt;
+//    private String salt;
+    private byte[] salt;
 
 //    @Column(length = 45, nullable = false)
 //    private String email;

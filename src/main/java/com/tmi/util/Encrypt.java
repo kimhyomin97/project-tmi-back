@@ -11,6 +11,15 @@ import java.util.Random;
 public class Encrypt {
     private static final Random random = new Random(); // 임시 salt값
 
+    // Generate a random salt value
+//    public String generateSalt(){
+    public byte[] generateSalt(){
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+//        return new String(salt, StandardCharsets.UTF_8);
+        return salt;
+    }
+
     /**
      * @param password
      * @return
@@ -18,12 +27,8 @@ public class Encrypt {
      * salt value를 password와 결합하고, 결합된 값의 hash를 계산한다
      * salt와 hash가 연결되어 64비트로 인코딩된 문자열로 return
      */
-    public String encryptPassword(String password){
+    public String encryptPassword(String password, byte[] salt){
         try{
-            // Generate a random salt value
-            byte[] salt = new byte[16];
-            random.nextBytes(salt);
-
             // Concatenate the password and salt
             byte[] passwordAndSalt = new byte[password.length() + salt.length];
             System.arraycopy(password.getBytes("UTF-8"), 0, passwordAndSalt, 0, password.length());

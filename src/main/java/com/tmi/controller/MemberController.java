@@ -22,9 +22,10 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, Object>> signup(@RequestBody Member member){
+    public ResponseEntity<Map<String, Object>> signup(@RequestBody Member member) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
+        HttpStatus status = HttpStatus.OK;
+        memberService.signUp(member);
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }

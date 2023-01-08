@@ -15,6 +15,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByMemberidAndMemberpw(String memberId, String memberPw);
 
+    Member findByMemberid(String memberId);
+
 //    @Query(value = "SELECT * FROM member WHERE ")
 
 }
