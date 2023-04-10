@@ -20,4 +20,8 @@ public class RestaurantService {
     public List<Restaurant> findRestaurantsByName(String name) {
         return restaurantRepository.findByName(name);
     }
+
+    public List<Restaurant> getNearestRestaurants(Double lat, Double lon) {
+        return restaurantRepository.findNearestRestaurants(lat, lon);
+    }
 }

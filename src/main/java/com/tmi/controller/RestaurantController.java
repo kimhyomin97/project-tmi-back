@@ -2,15 +2,13 @@ package com.tmi.controller;
 
 import com.tmi.dto.Restaurant;
 import com.tmi.service.RestaurantService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurants")
+@RequestMapping("/api/restaurants")
 @CrossOrigin("*")
 public class RestaurantController {
 
@@ -20,8 +18,14 @@ public class RestaurantController {
         this.restaurantService = restaurantService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Restaurant> getAllRestaurants() {
         return restaurantService.findAll();
+    }
+
+    @GetMapping("/near")
+    public ResponseEntity<List<Restaurant>> getNearestRestaurants(@RequestParam Double lat, @RequestParam Double lon) {
+        List<Restaurant> nearestRestaurants = restaurantService.getNearestRestaurants(lat, lon);
+        return ResponseEntity.ok().body(nearestRestaurants);
     }
 }
