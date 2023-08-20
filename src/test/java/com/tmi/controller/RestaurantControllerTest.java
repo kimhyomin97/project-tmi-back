@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,11 +38,37 @@ public class RestaurantControllerTest {
 
     @Test
     public void testGetAllRestaurants() throws Exception {
-        // Given
-        Restaurant restaurant1 = new Restaurant("2023-07-29T12:34:56", "Restaurant 1", "Address 1", "2023-07-29T10:00:00",
-                "Korean", 37.12345, 127.56789);
-        Restaurant restaurant2 = new Restaurant("2023-07-29T12:34:57", "Restaurant 2", "Address 2", "2023-07-29T09:30:00",
-                "Italian", 37.23456, 127.67890);
+        Restaurant restaurant1 = new Restaurant(
+                LocalDateTime.parse("2023-07-29T12:34:56"),
+                "Address 1",
+                37.12345,
+                "2023-07-29T10:00:00",
+                127.56789,
+                "Restaurant 1",
+                "Korean",
+                "Open",
+                "12345",
+                "http://www.restaurant1.com",
+                202722.53183055,
+                444055.07069569,
+                LocalDateTime.parse("2023-07-29T12:34:56")
+        );
+
+        Restaurant restaurant2 = new Restaurant(
+                LocalDateTime.parse("2023-07-29T12:34:57"),
+                "Address 2",
+                37.23456,
+                "2023-07-29T09:30:00",
+                127.67890,
+                "Restaurant 2",
+                "Italian",
+                "Open",
+                "56789",
+                "http://www.restaurant2.com",
+                203011.67895432,
+                445566.12345678,
+                LocalDateTime.parse("2023-07-29T12:34:57")
+        );
 
         List<Restaurant> allRestaurants = Arrays.asList(restaurant1, restaurant2);
 
@@ -59,11 +86,37 @@ public class RestaurantControllerTest {
 
     @Test
     public void testGetNearestRestaurants() throws Exception {
-        // Given
-        Restaurant restaurant1 = new Restaurant("2023-07-29T12:34:56", "Restaurant 1", "Address 1", "2023-07-29T10:00:00",
-                "Korean", 37.12345, 127.56789);
-        Restaurant restaurant2 = new Restaurant("2023-07-29T12:34:57", "Restaurant 2", "Address 2", "2023-07-29T09:30:00",
-                "Italian", 37.23456, 127.67890);
+        Restaurant restaurant1 = new Restaurant(
+                LocalDateTime.parse("2023-07-29T12:34:56"),
+                "Address 1",
+                37.12345,
+                "2023-07-29T10:00:00",
+                127.56789,
+                "Restaurant 1",
+                "Korean",
+                "Open",
+                "12345",
+                "http://www.restaurant1.com",
+                202722.53183055,
+                444055.07069569,
+                LocalDateTime.parse("2023-07-29T12:34:56")
+        );
+
+        Restaurant restaurant2 = new Restaurant(
+                LocalDateTime.parse("2023-07-29T12:34:57"),
+                "Address 2",
+                37.23456,
+                "2023-07-29T09:30:00",
+                127.67890,
+                "Restaurant 2",
+                "Italian",
+                "Open",
+                "56789",
+                "http://www.restaurant2.com",
+                203011.67895432,
+                445566.12345678,
+                LocalDateTime.parse("2023-07-29T12:34:57")
+        );
 
         List<Restaurant> nearestRestaurants = Arrays.asList(restaurant1, restaurant2);
 
