@@ -36,7 +36,8 @@ dependencies {
 	implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.10.Final'
 	implementation 'com.h2database:h2' // 메모리에서 실행되어 애플리케이션 재시작마다 초기화된다
 
-
+	// Spring Boot DevTools
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 //	compile('org.springframework.boot:spring-boot-stater-data-jpa')
 //	compile('com.h2database:h2') // 인메모리 RDB
