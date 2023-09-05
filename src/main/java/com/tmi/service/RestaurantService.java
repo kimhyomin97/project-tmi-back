@@ -7,21 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-public class RestaurantService {
 
-    private final RestaurantRepository restaurantRepository;
+public interface RestaurantService {
+    public List<Restaurant> findAll();
 
-    public List<Restaurant> findAll() {
-        return restaurantRepository.findAll();
-    }
+    public List<Restaurant> findRestaurantsByName(String name);
 
-    public List<Restaurant> findRestaurantsByName(String name) {
-        return restaurantRepository.findByName(name);
-    }
+    public List<Restaurant> getNearestRestaurants(Double lat, Double lon);
 
-    public List<Restaurant> getNearestRestaurants(Double lat, Double lon) {
-        return restaurantRepository.findNearestRestaurants(lat, lon);
-    }
+    public List<Restaurant> getNearByLatAndLon(Double lat, Double lon, int limit);
 }
