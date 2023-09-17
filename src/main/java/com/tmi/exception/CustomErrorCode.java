@@ -18,7 +18,11 @@ public enum CustomErrorCode {
     // 500 Internal Server Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "fail", "Server Error"),
     // 503 Service Unavailable
-    SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "fail", "Service Unavailable");
+    SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "fail", "Service Unavailable"),
+    INVALID_LATLON(HttpStatus.BAD_REQUEST, "fail", "Invalid LatLon"), // 잘못된 좌표값 입력
+    
+    
+    ;
 
     private final HttpStatus httpStatus;
     private final String result;
