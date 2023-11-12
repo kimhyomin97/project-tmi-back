@@ -1,5 +1,6 @@
 package com.tmi.controller;
 
+import com.tmi.aspect.LogExecutionTime;
 import com.tmi.dto.ResponseDto;
 import com.tmi.dto.Restaurant;
 import com.tmi.service.RestaurantService;
@@ -17,9 +18,10 @@ import java.util.List;
 @Slf4j
 public class RestaurantController {
 
-    private RestaurantService restaurantService;
+    private final RestaurantService restaurantService;
 
     @GetMapping("/all")
+    @LogExecutionTime
     public List<Restaurant> getAllRestaurants() {
         log.info("request all restaurants");
         return restaurantService.findAll();
