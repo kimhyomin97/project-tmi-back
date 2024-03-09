@@ -20,12 +20,13 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
-    @GetMapping("/all")
-    @LogExecutionTime
-    public List<Restaurant> getAllRestaurants() {
-        log.info("request all restaurants");
-        return restaurantService.findAll();
-    }
+//    전체 데이터 조회시 과부하
+//    @GetMapping("/all")
+//    @LogExecutionTime
+//    public List<Restaurant> getAllRestaurants() {
+//        log.info("request all restaurants");
+//        return restaurantService.findAll();
+//    }
 
     /**
      * 파라미터로 개수를 입력받아 해당 개수만큼 음식점 정보를 리턴하는 api

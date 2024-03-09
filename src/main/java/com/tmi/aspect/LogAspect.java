@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 @Aspect
 @Component
@@ -36,11 +37,11 @@ public class LogAspect {
         Method method = methodSignature.getMethod();
         log.info("method: {}", method.getName());
 
+        Parameter[] parameters = method.getParameters();
         Object[] args = joinPoint.getArgs();
 
-        for (Object arg : args) {
-            log.info("type : ", arg.getClass().getSimpleName());
-            log.info("value : ", arg);
+        for(int i = 0; i < parameters.length; i++){
+            log.info("type: {}, {} : {}", parameters[i].getType(), parameters[i].getName(), args[i]);
         }
     }
 
