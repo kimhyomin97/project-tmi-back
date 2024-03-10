@@ -8,9 +8,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-
 @Aspect
 @Component
 @Slf4j
@@ -40,8 +40,26 @@ public class LogAspect {
         Parameter[] parameters = method.getParameters();
         Object[] args = joinPoint.getArgs();
 
-        for(int i = 0; i < parameters.length; i++){
-            log.info("type: {}, {} : {}", parameters[i].getType(), parameters[i].getName(), args[i]);
+        for (int i= 0; i < parameters.length; i++) {
+            Parameter parameter = parameters[i];
+            Object arg = args[i];
+            Class<?> parameterType = parameter.getType();
+            if (parameterType.isPrimitive() || parameterType.getName().startsWith("java.lang")) {
+                // 기본 타입 출력
+                log.info("{} : {}", parameter.getName(), arg);
+            } else {
+                // 객체 타입 출력
+                log.info("{} : {}", parameter.getName(), arg);
+                Field[] fields = arg.getClass().getDeclaredFields();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    try {
+                        log.info("    {} : {}", field.getName(), field.get(arg));
+                    } catch (IllegalAccessException e) {
+                        log.error("Error accessing field {}", field.getName(), e);
+                    }
+                }
+            }
         }
     }
 
