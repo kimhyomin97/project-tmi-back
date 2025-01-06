@@ -16,4 +16,6 @@ public interface RestaurantService {
     public List<Restaurant> getNearestRestaurants(Double lat, Double lon);
 
     public List<Restaurant> getNearByLatAndLon(Double lat, Double lon, int limit);
+
+    public List<Restaurant> getApiTest();
 }
