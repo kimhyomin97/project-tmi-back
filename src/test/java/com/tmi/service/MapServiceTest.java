@@ -1,6 +1,7 @@
 package com.tmi.service;
 
 import com.tmi.dto.TransportDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,10 @@ public class MapServiceTest {
     public void getBustPositionInfoTest() throws Exception {
         TransportDto temp = new TransportDto();
         mapService.getBustPositionInfo(temp);
+    }
+
+    @Test
+    public void getBusInfoTest() {
+        Assertions.assertDoesNotThrow(() -> mapService.getBusInfo());
     }
 }

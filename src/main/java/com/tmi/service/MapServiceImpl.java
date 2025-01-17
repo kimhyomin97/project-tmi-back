@@ -1,17 +1,30 @@
 package com.tmi.service;
 
+import com.tmi.dto.BusInfoResponse;
 import com.tmi.dto.TransportDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MapServiceImpl implements MapService{
 
     private String apiUrl = "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid";
+
+    @Value("${dataseoul.apiurl}")
+    private String dataSeoulApiUrl;
+
+    @Value("${dataseoul.apikey}")
+    private String dataSeoulApiKey;
+
+    private final RestTemplate restTemplate;
 
     @Value("${datagokr.apikey}")
     private String apiKey;
@@ -31,4 +44,30 @@ public class MapServiceImpl implements MapService{
 
         System.out.println(response);
     }
+
+
+     public void getBusInfo() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<BusInfoResponse> response = restTemplate.exchange(dataSeoulApiUrl + "/" + dataSeoulApiKey + "/json/busRoute/1/1000/", HttpMethod.GET, null, BusInfoResponse.class);
+
+        BusInfoResponse busInfoResponse = response.getBody();
+
+        if (busInfoResponse != null && busInfoResponse.getBusRoute() != null) {
+            System.out.println("count : " + busInfoResponse.getBusRoute().getListTotalCount());
+
+            System.out.println("CODE : " + busInfoResponse.getBusRoute().getResult().getCODE());
+
+            System.out.println("MESSAGE : " + busInfoResponse.getBusRoute().getResult().getMESSAGE());
+
+
+            List<BusInfoResponse.BusInfo> busInfoList = busInfoResponse.getBusRoute().getRow();
+
+            for (BusInfoResponse.BusInfo busInfo : busInfoList) {
+                System.out.println(busInfo.getRouteId() + ", " + busInfo.getRoutName());
+            }
+        }
+
+        // TODO : 버스 노선 id정보 DB저장
+     }
 }
