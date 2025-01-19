@@ -2,7 +2,10 @@ package com.tmi.service;
 
 import com.tmi.dto.BusInfoResponse;
 import com.tmi.dto.TransportDto;
+import com.tmi.entity.BusIdentification;
+import com.tmi.repository.BusIdentificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +32,9 @@ public class MapServiceImpl implements MapService{
 
     @Value("${datagokr.apikey}")
     private String apiKey;
+
+    @Autowired
+    BusIdentificationRepository busIdentificationRepository;
 
     public void getBustPositionInfo(TransportDto transportDto) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
@@ -54,20 +61,18 @@ public class MapServiceImpl implements MapService{
         BusInfoResponse busInfoResponse = response.getBody();
 
         if (busInfoResponse != null && busInfoResponse.getBusRoute() != null) {
-            System.out.println("count : " + busInfoResponse.getBusRoute().getListTotalCount());
-
-            System.out.println("CODE : " + busInfoResponse.getBusRoute().getResult().getCODE());
-
-            System.out.println("MESSAGE : " + busInfoResponse.getBusRoute().getResult().getMESSAGE());
-
-
             List<BusInfoResponse.BusInfo> busInfoList = busInfoResponse.getBusRoute().getRow();
 
             for (BusInfoResponse.BusInfo busInfo : busInfoList) {
-                System.out.println(busInfo.getRouteId() + ", " + busInfo.getRoutName());
+                if(!busIdentificationRepository.existsByBusIdAndDelDttmIsNull(busInfo.getRouteId())){
+                    BusIdentification busIdentification = new BusIdentification();
+                    busIdentification.setBusName(busInfo.getRoutName());
+                    busIdentification.setBusId(busInfo.getRouteId());
+                    busIdentification.setRegDttm(LocalDateTime.now());
+
+                    busIdentificationRepository.save(busIdentification);
+                }
             }
         }
-
-        // TODO : 버스 노선 id정보 DB저장
      }
 }
