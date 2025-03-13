@@ -1,6 +1,5 @@
 package com.tmi.controller;
 
-import com.tmi.aspect.LogExecutionTime;
 import com.tmi.dto.ResponseDto;
 import com.tmi.dto.Restaurant;
 import com.tmi.service.RestaurantService;
@@ -27,6 +26,19 @@ public class RestaurantController {
 //        log.info("request all restaurants");
 //        return restaurantService.findAll();
 //    }
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<Restaurant>>> getRestaurants(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = true) Double lat,
+            @RequestParam(required = true) Double lng,
+            @RequestParam(required = false, defaultValue = "100") int radius
+    ) {
+        List<Restaurant> restaurants = restaurantService.getRestaurants(category, lat, lng, radius);
+        ResponseDto<List<Restaurant>> responseDto = new ResponseDto<>();
+        responseDto.setMessage("음식점 조회 성공");
+        responseDto.setData(restaurants);
+        return ResponseEntity.ok().body(responseDto);
+    }
 
     /**
      * 파라미터로 개수를 입력받아 해당 개수만큼 음식점 정보를 리턴하는 api

@@ -9,6 +9,7 @@ import java.util.List;
 
 
 public interface RestaurantService {
+    public List<Restaurant> getRestaurants(String category, Double lat, Double lng, int radius);
     public List<Restaurant> findAll();
 
     public List<Restaurant> findRestaurantsByName(String name);

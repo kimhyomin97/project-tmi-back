@@ -22,13 +22,17 @@ import java.util.List;
 @Slf4j
 public class RestaurantServiceImpl implements RestaurantService {
 
-    @Value("${datagokr.apikey}")
+    @Value("${datagokr.apikeyInfuser}")
     private String apiKey;
 
     @Value("${datagokr.apiUrl}")
     private String apiUrl;
 
     private final RestaurantRepository restaurantRepository;
+
+    public List<Restaurant> getRestaurants(String category, Double lat, Double lng, int radius) {
+        return restaurantRepository.findNearByWithCategory(lat, lng, radius, category);
+    }
     public List<Restaurant> findAll() {
         return restaurantRepository.findAll();
     }

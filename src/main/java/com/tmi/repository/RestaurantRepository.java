@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
+    @Query(value = "SELECT * FROM restaurant r WHERE ST_Distance_Sphere(POINT(r.lon, r.lat), POINT(:lng, :lat)) <= :radius AND (:category IS NULL OR r.rest_type = :category)", nativeQuery = true)
+    List<Restaurant> findNearByWithCategory(@Param("lat") Double lat, @Param("lng") Double lng, @Param("radius") int radius, @Param("category") String category);
+
     List<Restaurant> findByName(String name);
 
 //    @Query(value = "SELECT *, (6371 * acos(cos(radians(:lat)) * cos(radians(lat)) * cos(radians(lon) - radians(:lon)) + sin(radians(:lat)) * sin(radians(lat)))) AS distance FROM restaurant WHERE lat IS NOT NULL AND lon IS NOT NULL ORDER BY distance ASC LIMIT 1000", nativeQuery = true)
