@@ -2,9 +2,11 @@ package com.tmi.controller;
 
 import com.tmi.dto.ResponseDto;
 import com.tmi.dto.Restaurant;
+import com.tmi.dto.ReviewRequestDto;
 import com.tmi.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +40,22 @@ public class RestaurantController {
         responseDto.setMessage("음식점 조회 성공");
         responseDto.setData(restaurants);
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    @PostMapping("/reviews")
+    public ResponseEntity<ResponseDto<Void>> createReview(@RequestBody ReviewRequestDto reviewRequestDto) {
+        log.info("create review userId={}", reviewRequestDto.getMemberId());
+        restaurantService.createReview(reviewRequestDto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/reviews/{reviewId}")
+    public ResponseEntity<ResponseDto<Void>> deleteReview(@PathVariable Long reviewId) {
+        log.info("delete review reviewId={}", reviewId);
+        restaurantService.deleteReview(reviewId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**

@@ -1,18 +1,21 @@
 package com.tmi.service;
 
+import com.tmi.dto.Member;
 import com.tmi.dto.Restaurant;
+import com.tmi.dto.ReviewRequestDto;
+import com.tmi.entity.Review;
 import com.tmi.exception.CustomErrorCode;
 import com.tmi.exception.CustomException;
+import com.tmi.repository.MemberRepository;
 import com.tmi.repository.RestaurantRepository;
+import com.tmi.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +33,39 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
 
+    private final MemberRepository memberRepository;
+    private final ReviewRepository reviewRepository;
+
     public List<Restaurant> getRestaurants(String category, Double lat, Double lng, int radius) {
         return restaurantRepository.findNearByWithCategory(lat, lng, radius, category);
+    }
+
+    public void createReview(ReviewRequestDto reviewRequestDto) {
+
+        Member member = memberRepository.findById(reviewRequestDto.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        Restaurant restaurant = restaurantRepository.findById(reviewRequestDto.getRestaurantId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 음식점입니다."));
+
+        Review review = Review.builder()
+                .restaurant(restaurant)
+                .memberId(reviewRequestDto.getMemberId())
+                .rating(reviewRequestDto.getRating())
+                .comment(reviewRequestDto.getComment())
+                .build();
+
+        reviewRepository.save(review);
+    }
+
+    public void deleteReview(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다"));
+        if(review.getDeleteDttm() != null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "이미 삭제된 리뷰입니다.");
+        }
+
+        review.deleteReview();
     }
     public List<Restaurant> findAll() {
         return restaurantRepository.findAll();
