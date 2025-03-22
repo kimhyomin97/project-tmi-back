@@ -40,6 +40,19 @@ dependencies {
 	implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.10.Final'
 	implementation 'com.h2database:h2' // 메모리에서 실행되어 애플리케이션 재시작마다 초기화된다
 
+	// OpenTelemetry API 및 SDK
+	implementation 'io.opentelemetry:opentelemetry-api:1.30.0'
+	implementation 'io.opentelemetry:opentelemetry-sdk:1.30.0'
+
+	// OpenTelemetry 자동 계측 (Spring Boot)
+	implementation 'io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter:1.30.0'
+
+	// OpenTelemetry 로그 연동
+	implementation 'io.opentelemetry.instrumentation:opentelemetry-logback-appender:1.30.0'
+
+	// OTLP Exporter (로그/트레이스 전송)
+	implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.30.0'
+
 	// Spring Boot DevTools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
