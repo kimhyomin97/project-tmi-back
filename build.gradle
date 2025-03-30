@@ -6,7 +6,8 @@ plugins {
 
 group = 'com.tmi'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 configurations {
 	compileOnly {
@@ -45,10 +46,10 @@ dependencies {
 	implementation 'io.opentelemetry:opentelemetry-sdk:1.30.0'
 
 	// OpenTelemetry 자동 계측 (Spring Boot)
-	implementation 'io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter:1.30.0'
+	implementation 'io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter:1.30.0-alpha'
 
 	// OpenTelemetry 로그 연동
-	implementation 'io.opentelemetry.instrumentation:opentelemetry-logback-appender:1.30.0'
+	implementation 'io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:1.30.0-alpha'
 
 	// OTLP Exporter (로그/트레이스 전송)
 	implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.30.0'
