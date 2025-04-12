@@ -57,6 +57,9 @@ dependencies {
 	// Spring Boot DevTools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	// Kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+
 //	compile('org.springframework.boot:spring-boot-stater-data-jpa')
 //	compile('com.h2database:h2') // 인메모리 RDB
 
