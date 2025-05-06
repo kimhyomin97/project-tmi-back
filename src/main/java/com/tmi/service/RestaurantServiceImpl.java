@@ -9,16 +9,21 @@ import com.tmi.exception.CustomException;
 import com.tmi.repository.MemberRepository;
 import com.tmi.repository.RestaurantRepository;
 import com.tmi.repository.ReviewRepository;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +40,17 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
+
+    private final MeterRegistry meterRegistry;
+
+    private final AtomicInteger reviewCount = new AtomicInteger(0);
+
+    @PostConstruct
+    public void registerGauge() {
+        Gauge.builder("review.count", reviewCount, AtomicInteger::get)
+                .description("등록된 review 개수")
+                .register(meterRegistry);
+    }
 
     public List<Restaurant> getRestaurants(String category, Double lat, Double lng, int radius) {
         return restaurantRepository.findNearByWithCategory(lat, lng, radius, category);
@@ -56,6 +72,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .build();
 
         reviewRepository.save(review);
+        reviewCount.incrementAndGet();
     }
 
     public void deleteReview(Long reviewId) {
@@ -66,6 +83,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         review.deleteReview();
+        reviewCount.decrementAndGet();
     }
     public List<Restaurant> findAll() {
         return restaurantRepository.findAll();

@@ -60,6 +60,10 @@ dependencies {
 	// Kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 
+	// metric
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-otlp'
+
 //	compile('org.springframework.boot:spring-boot-stater-data-jpa')
 //	compile('com.h2database:h2') // 인메모리 RDB
 
